@@ -1,5 +1,6 @@
 import './App.css';
-import Form from './Component/form';
+//import Form from './Component/form';
+import Homepage from './Homepage';
 
 
 
@@ -8,7 +9,7 @@ function App() {
 
 return (
     <div className="App">
-      <Form/>   
+      <Homepage/>   
     </div>
   );
 }

@@ -31,7 +31,7 @@ const Homepage  = ()=> {
     const FutureShape = styled.div`
     ${Shape};
     clip-path: polygon(0 0, 55% 0%, 33% 100%, 0 100%);
-    background-color: pink;
+    background-color: blue;
     `
     const ServiceShape = styled.div`
       ${Shape}
