@@ -3,8 +3,8 @@ import styled from "styled-components";
 const Square = styled.div`
 width:60px;
 height:60px;
-background:royalblue;
-opacity:.7;
+background:#046eaf;
+
 position:absolute;
 bottom:0px;
 right:0px;
@@ -20,8 +20,8 @@ const Circle = styled.div`
 width:100px;
 height:100px;
 border-radius:50%;
-background:pink;
-opacity:.7;
+background:#0e4e78;
+
 position:absolute;
 top:200px;
 right:-10px;
@@ -36,8 +36,8 @@ animation : circle 25s linear alternate infinite;
 const Rect = styled.div`
 width:50px;
 height:100px;
-background:lightgreen;
-opacity:.5;
+background:#ef7807;
+
 position:absolute;
 top:400px;
 left:-50px;

@@ -1,13 +1,19 @@
 import styled from "styled-components";
-import woman from "../assets/3-removebg-preview.png"
+import woman from "../assets/pngegg.png"
 import AnimatedShapes from "./AnimatedShapes";
+import { ImTextColor } from "react-icons/im";
+import { MdEmail } from "react-icons/md";
 const Intro = () => {
   const smallScreen = window.screen.width <= 480 ? true : false;
   
   return (
     <Container>
       <Left>
-        <Title>AVOCarbon Group</Title>
+        <Title>
+          <span style={{ color: '#046eaf',fontStyle: 'italic' }}>AVO</span>
+          <span style={{ color: 'gray',fontStyle: 'italic' }}>Carbon</span> 
+          <span style={{ color: '#ef7807' ,fontSize: '24px',fontStyle: 'italic'}}>Group</span> 
+        </Title>
         <Desc>
           We believe that designing products and services in close partnership
           with our clients is the only way to have a real impact on their
@@ -16,8 +22,9 @@ const Intro = () => {
         <Info>
           <Button>START A PROJECT</Button>
           <Contact>
-            <Phone>Call Us (012) 345 - 6789</Phone>
-            <ContactText>For any question or concern</ContactText>
+          <ContactText>For any question or concern</ContactText>
+            <Email>Contact Us<br></br> taha.khiari@avocarbon.com<br></br>mootaz.farwa@avocarbon.com</Email>
+            <ContactText>Powred By Same Tunisie Service</ContactText>
           </Contact>
         </Info>
       </Left>
@@ -88,8 +95,8 @@ flex-direction:column;
  }
 `;
 
-const Phone = styled.span`
-color:pink;
+const Email = styled.span`
+color:#ef7807;
 `;
 
 const ContactText = styled.span`

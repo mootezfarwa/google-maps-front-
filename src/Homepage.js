@@ -25,13 +25,13 @@ const Homepage  = ()=> {
     
     const IntroShape = styled.div`
     ${Shape};
-    background:crimson;
+    background:#ef7807;
     clip-path: polygon(67% 0, 100% 0, 100% 100%, 55% 100%);
     `
     const FutureShape = styled.div`
     ${Shape};
     clip-path: polygon(0 0, 55% 0%, 33% 100%, 0 100%);
-    background-color: blue;
+    background-color: #046eaf;
     `
     const ServiceShape = styled.div`
       ${Shape}
@@ -57,20 +57,7 @@ return (<div>
         <FutureShape />
       </Container>
 
-      <Container>
-        <Service />
-        <ServiceShape />
-      </Container>
 
-      <Container>
-        <Price />
-        <PriceShape />
-      </Container>
-
-      <Container>
-        <Contact />
-        <Footer />
-      </Container>
 </div>);
 
 

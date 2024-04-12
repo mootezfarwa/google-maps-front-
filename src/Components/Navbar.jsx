@@ -103,7 +103,7 @@ padding:0 .6rem;
 border-radius:.5rem;
 border:1px solid white;
 color:white;
-background:crimson;
+background:#046eaf;
 cursor:pointer;
 margin-left:auto;
 `
