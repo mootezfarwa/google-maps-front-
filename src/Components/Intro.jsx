@@ -15,20 +15,23 @@ const Intro = () => {
           <span style={{ color: '#ef7807' ,fontSize: '24px',fontStyle: 'italic'}}>Group</span> 
         </Title>
         <Desc>
-          We believe that designing products and services in close partnership
-          with our clients is the only way to have a real impact on their
-          business.
+          This application allows you to identify your competitors on a map and add information about them.
         </Desc>
         <Info>
-          <Button>START A PROJECT</Button>
-          <Contact>
+          <Button>Form</Button>
+          <ButtonM>Map</ButtonM>
+        </Info>
+        
+      </Left>
+      <Right>
+        <h1 style={{  marginLeft: '20px',color: '#046eaf' }}>Competitor Mapping</h1>
+        <img src={woman} alt="Woman" style={{  marginTop: '180px' }} />
+        <Contact>
           <ContactText>For any question or concern</ContactText>
             <Email>Contact Us<br></br> taha.khiari@avocarbon.com<br></br>mootaz.farwa@avocarbon.com</Email>
             <ContactText>Powred By Same Tunisie Service</ContactText>
           </Contact>
-        </Info>
-      </Left>
-      <Right><img src={woman} alt="Woman" style={{  marginTop: '180px' }} /></Right>
+        </Right>
       <AnimatedShapes />
     </Container>
   );
@@ -81,10 +84,20 @@ const Info = styled.div`
 const Button = styled.button`
 cursor:pointer;
 padding:1rem; 
-background:darkblue;
-color:snow; 
+background:#046eaf;
+color:#ef7807; 
 border-radius:10px;
-letter-spacing:2px
+letter-spacing:2px;
+font-weight: bold;
+`;
+const ButtonM = styled.button`
+cursor:pointer;
+padding:1rem; 
+background:#046eaf;
+color:#ef7807; 
+border-radius:10px;
+letter-spacing:2px;
+font-weight: bold;
 `;
 
 const Contact = styled.div`
@@ -96,7 +109,8 @@ flex-direction:column;
 `;
 
 const Email = styled.span`
-color:#ef7807;
+color:#0e4e78;
+font-weight: bold;
 `;
 
 const ContactText = styled.span`
