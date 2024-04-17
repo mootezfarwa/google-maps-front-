@@ -21,7 +21,7 @@ const Intro = () => {
           <Link to="/form">
           <Button>Form</Button>
           </Link>
-          <Link to="/map">
+          <Link to="/mapp">
           <ButtonM>Map</ButtonM>
           </Link>
         </Info>
