@@ -1,20 +1,24 @@
 import { useState } from "react";
 import styled from "styled-components";
-import phonehand from "../assets/logo-avocarbon.png" 
+import phonehand from "../assets/logo-avocarbon.png"
 import { Link } from 'react-router-dom';
 const Navbar = () => {
-
+ 
     const [Show, setShow] = useState(false);
     const smallScreen = window.screen.width <= 768 ? true : false
  
-
+ 
     return (
         <Container>
             <img src={phonehand} width={140}height={30}/>
             <Menu style={{ display: smallScreen ? "none" : "flex" }}>
                 <Item>Home</Item>
+                <Link to="/form">
                 <Item>Form</Item>
+                </Link>
+                <Link to="/map">
                 <Item>Location</Item>
+                </Link>
                 <Item>Contact</Item>
             </Menu>
             {
@@ -29,11 +33,11 @@ const Navbar = () => {
                 <Item>Pricing</Item>
                 <Item>Contact</Item>
             </ResMenu>
-
+ 
             <Button>Join Today</Button>
         </Container >
     );
-
+ 
 }
 const Logo = styled.a`
 font-size:2rem;
@@ -62,7 +66,7 @@ padding:.2rem;
 rotate:90deg;
 cursor:pointer;
 `;
-
+ 
 const Close = styled.button`
 position:absolute;
 top:1rem;
@@ -70,7 +74,7 @@ left:1rem;
 padding:.3rem;
 color:gray;
 `
-
+ 
 const ResMenu = styled.ul`
 width:100vw;
 height:0;
@@ -90,7 +94,7 @@ animation:menu .5s linear forwards;
     }
 }
 `;
-
+ 
 const Item = styled.li`
 cursor:pointer;
 list-style:none;
@@ -107,5 +111,5 @@ background:#046eaf;
 cursor:pointer;
 margin-left:auto;
 `
-
+ 
 export default Navbar;

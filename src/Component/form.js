@@ -3,7 +3,7 @@ import axios from 'axios';
 import './form.css';
 import Notification from './Notification/Notification';
 import phonehand from "../assets/logo-avocarbon.png";
-
+ 
 function Form() {
     const [companies, setCompanies] = useState([]);
     const [selectedCompanyId, setSelectedCompanyId] = useState('');
@@ -13,17 +13,17 @@ function Form() {
         r_and_d_location: '',
         country: '',
         product: '',
-        
+ 
     });
     const [successMessage, setSuccessMessage] = useState('');
     const [showSelect, setShowSelect] = useState(false);
-
-
+ 
+ 
     useEffect(() => {
         fetchCompanies();
     }, []);
-
-
+ 
+ 
     const fetchCompanies = async () => {
         try {
             const response = await axios.get('http://localhost:4000/companies');
@@ -32,18 +32,19 @@ function Form() {
             console.error('Error fetching companies: ', error);
         }
     };
-
+ 
     const handleSubmit = async (event) => {
         event.preventDefault();
         const formData = new FormData(event.target);
-
+ 
         try {
             const response = await axios.post('http://localhost:4000/companies', {
                 name: formData.get('name'),
                 headquarters_location: formData.get('headquarters_location'),
                 r_and_d_location: formData.get('r_and_d_location'),
                 country: formData.get('country'),
-
+                product: formData.get('product')
+ 
             });
             setSuccessMessage('Company added successfully');
             event.target.reset(); // Reset form after successful submission
@@ -54,34 +55,35 @@ function Form() {
     const handleUpdateClick = () => {
         setShowSelect(true);
     };
-
+ 
     const handleSelectChange = async (e) => {
-        const selectedId = e.target.value;
-        setSelectedCompanyId(selectedId);
-
-        // Fetch the company details from the backend
+        const selectedName = e.target.value;
+        const selectedCompany = companies.find(company => company.name === selectedName);
+        setSelectedCompanyId(selectedCompany.id);
+ 
+        // Fetch the company details from the backend using the company ID
         try {
-            const response = await axios.get(`http://localhost:4000/companies/${selectedId}`);
-            const selectedCompany = response.data;
-            if (selectedCompany) {
+            const response = await axios.get(`http://localhost:4000/companies/${selectedCompany.id}`);
+            const selectedCompanyData = response.data;
+            if (selectedCompanyData) {
                 // Set the form data with the details of the selected company
                 setFormData({
-                    name: selectedCompany.name,
-                    headquarters_location: selectedCompany.headquarters_location,
-                    r_and_d_location: selectedCompany.r_and_d_location,
-                    country: selectedCompany.country,
-                    product: selectedCompany.product,
-                    
+                    name: selectedCompanyData.name,
+                    headquarters_location: selectedCompanyData.headquarters_location,
+                    r_and_d_location: selectedCompanyData.r_and_d_location,
+                    country: selectedCompanyData.country,
+                    product: selectedCompanyData.product,
                 });
             }
         } catch (error) {
             console.error('Error fetching company details: ', error);
         }
     };
-
-
-
-
+ 
+ 
+ 
+ 
+ 
     const handleUpdate = async (e) => {
         e.preventDefault();
         // Implement your update logic here, using formData and selectedCompanyId
@@ -92,23 +94,22 @@ function Form() {
             console.error('Error updating company: ', error);
         }
     };
-
+ 
     return (
         <div className="container">
             <form onSubmit={handleSubmit} className="form">
                 <img src={phonehand} width={180} height={50} style={{ marginBottom: '20px' }} />
-                <div className="button-container">
-                    <button type="button" onClick={handleUpdateClick} className="button">Show</button>
-                </div>
+ 
                 {showSelect &&
                     <div className="input-group">
-                        <label htmlFor="selectCompany" className="label">Select Company ID:</label>
-                        <select name="selectCompany" value={selectedCompanyId} onChange={handleSelectChange} className="input">
-                            <option value="">Select Company ID</option>
+                        <label htmlFor="selectCompany" className="label">Select Company :</label>
+                        <select name="selectCompany" value={formData.name} onChange={handleSelectChange} className="input">
+                            <option value="">Select Company</option>
                             {companies.map(company => (
-                                <option key={company.id} value={company.id}>{company.id}</option>
+                                <option key={company.id} value={company.name}>{company.name}</option>
                             ))}
                         </select>
+ 
                     </div>
                 }
                 <div className="input-group">
@@ -123,7 +124,7 @@ function Form() {
                     <label htmlFor="r_and_d_location" className="label">R&D Location:</label>
                     <input type="text" name="r_and_d_location" placeholder="Enter R&D location" value={formData.r_and_d_location} required onChange={(e) => setFormData({ ...formData, r_and_d_location: e.target.value })} className="input" />
                 </div>
-
+ 
                 <div className="input-group">
                     <label htmlFor="country" className="label">Country:</label>
                     <select name="country" value={formData.country} onChange={(e) => setFormData({ ...formData, country: e.target.value })} className="input" required>
@@ -329,10 +330,13 @@ function Form() {
                     <label htmlFor="product" className="label">Product:</label>
                     <input type="text" name="product" placeholder="Enter your product" value={formData.product} onChange={(e) => setFormData({ ...formData, product: e.target.value })} className="input" />
                 </div>
-
-
+ 
+ 
                 <div className="button-container">
                     <button type="submit" className="button">Add</button>
+                    <div className="button-container">
+                        <a href="#" onClick={handleUpdateClick} className="link">Click here to update </a>
+                    </div>
                     {selectedCompanyId && <button onClick={handleUpdate} className="button">Update</button>}
                 </div>
             </form>
@@ -340,5 +344,5 @@ function Form() {
         </div>
     );
 }
-
+ 
 export default Form;
