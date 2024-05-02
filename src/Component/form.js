@@ -3,6 +3,9 @@ import axios from 'axios';
 import './form.css';
 import Notification from './Notification/Notification';
 import phonehand from "../assets/logo-avocarbon.png";
+import { useNavigate } from 'react-router-dom';
+import Map from './map';
+
 
 function Form() {
     const [companies, setCompanies] = useState([]);
@@ -13,16 +16,36 @@ function Form() {
         r_and_d_location: '',
         country: '',
         product: '',
-        
     });
     const [successMessage, setSuccessMessage] = useState('');
     const [showSelect, setShowSelect] = useState(false);
+    const [selectedCountry, setSelectedCountry] = useState('');
+    const [rdLocationSuggestions, setRdLocationSuggestions] = useState([]);
+    const [loadingRdSuggestions, setLoadingRdSuggestions] = useState(false);
+    const [selectedRdLocation, setSelectedRdLocation] = useState(null); // Selected R&D location
 
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetchCompanies();
     }, []);
 
+    const fetchRdLocationSuggestions = async (inputValue) => {
+        try {
+            setLoadingRdSuggestions(true);
+            const response = await axios.get(`https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(inputValue)}.json?access_token=pk.eyJ1IjoibW9vdGV6ZmFyd2EiLCJhIjoiY2x1Z3BoaTFqMW9hdjJpcGdibnN1djB5cyJ9.It7emRJnE-Ee59ysZKBOJw`);
+            setRdLocationSuggestions(response.data.features.map(feature => feature.place_name));
+        } catch (error) {
+            console.error('Error fetching R&D location suggestions: ', error);
+        } finally {
+            setLoadingRdSuggestions(false);
+        }
+    };
+
+    const handlesuggestionclick = (suggestion) => {
+        setFormData({ ...formData, r_and_d_location: suggestion });
+        setRdLocationSuggestions([]);
+    }
 
     const fetchCompanies = async () => {
         try {
@@ -43,44 +66,48 @@ function Form() {
                 headquarters_location: formData.get('headquarters_location'),
                 r_and_d_location: formData.get('r_and_d_location'),
                 country: formData.get('country'),
-
+                product: formData.get('product')
             });
             setSuccessMessage('Company added successfully');
             event.target.reset(); // Reset form after successful submission
+            setSelectedRdLocation(formData.get('r_and_d_location')); // Set the selected R&D location
         } catch (error) {
             console.error('Error adding company: ', error);
         }
     };
+
+    const navigatehome = () => {
+        navigate('/');
+    }
+
     const handleUpdateClick = () => {
         setShowSelect(true);
     };
 
     const handleSelectChange = async (e) => {
-        const selectedId = e.target.value;
-        setSelectedCompanyId(selectedId);
+        const selectedName = e.target.value;
+        const selectedCompany = companies.find(company => company.name === selectedName);
+        setSelectedCompanyId(selectedCompany.id);
 
-        // Fetch the company details from the backend
+        // Fetch the company details from the backend using the company ID
         try {
-            const response = await axios.get(`http://localhost:4000/companies/${selectedId}`);
-            const selectedCompany = response.data;
-            if (selectedCompany) {
+            const response = await axios.get(`http://localhost:4000/companies/${selectedCompany.id}`);
+            const selectedCompanyData = response.data;
+            if (selectedCompanyData) {
                 // Set the form data with the details of the selected company
                 setFormData({
-                    name: selectedCompany.name,
-                    headquarters_location: selectedCompany.headquarters_location,
-                    r_and_d_location: selectedCompany.r_and_d_location,
-                    country: selectedCompany.country,
-                    product: selectedCompany.product,
-                    
+                    name: selectedCompanyData.name,
+                    headquarters_location: selectedCompanyData.headquarters_location,
+                    r_and_d_location: selectedCompanyData.r_and_d_location,
+                    country: selectedCompanyData.country,
+                    product: selectedCompanyData.product,
                 });
+                setSelectedRdLocation(selectedCompanyData.r_and_d_location); // Set the selected R&D location
             }
         } catch (error) {
             console.error('Error fetching company details: ', error);
         }
     };
-
-
-
 
     const handleUpdate = async (e) => {
         e.preventDefault();
@@ -88,6 +115,9 @@ function Form() {
         try {
             const response = await axios.put(`http://localhost:4000/companies/${selectedCompanyId}`, formData);
             setSuccessMessage('Company updated successfully');
+            // Inside handleUpdate function, after successful update
+            setSelectedRdLocation(formData.r_and_d_location);
+
         } catch (error) {
             console.error('Error updating company: ', error);
         }
@@ -97,18 +127,17 @@ function Form() {
         <div className="container">
             <form onSubmit={handleSubmit} className="form">
                 <img src={phonehand} width={180} height={50} style={{ marginBottom: '20px' }} />
-                <div className="button-container">
-                    <button type="button" onClick={handleUpdateClick} className="button">Show</button>
-                </div>
+
                 {showSelect &&
                     <div className="input-group">
-                        <label htmlFor="selectCompany" className="label">Select Company ID:</label>
-                        <select name="selectCompany" value={selectedCompanyId} onChange={handleSelectChange} className="input">
-                            <option value="">Select Company ID</option>
+                        <label htmlFor="selectCompany" className="label">Select Company :</label>
+                        <select name="selectCompany" value={formData.name} onChange={handleSelectChange} className="input">
+                            <option value="">Select Company</option>
                             {companies.map(company => (
-                                <option key={company.id} value={company.id}>{company.id}</option>
+                                <option key={company.id} value={company.name}>{company.name}</option>
                             ))}
                         </select>
+
                     </div>
                 }
                 <div className="input-group">
@@ -118,10 +147,6 @@ function Form() {
                 <div className="input-group">
                     <label htmlFor="headquarters_location" className="label">Headquarters Location:</label>
                     <input type="text" name="headquarters_location" placeholder="Enter headquarters location" value={formData.headquarters_location} required onChange={(e) => setFormData({ ...formData, headquarters_location: e.target.value })} className="input" />
-                </div>
-                <div className="input-group">
-                    <label htmlFor="r_and_d_location" className="label">R&D Location:</label>
-                    <input type="text" name="r_and_d_location" placeholder="Enter R&D location" value={formData.r_and_d_location} required onChange={(e) => setFormData({ ...formData, r_and_d_location: e.target.value })} className="input" />
                 </div>
 
                 <div className="input-group">
@@ -329,14 +354,46 @@ function Form() {
                     <label htmlFor="product" className="label">Product:</label>
                     <input type="text" name="product" placeholder="Enter your product" value={formData.product} onChange={(e) => setFormData({ ...formData, product: e.target.value })} className="input" />
                 </div>
-
+                <div className="input-group">
+                    <label htmlFor="r_and_d_location" className="label">R&D Location:</label>
+                    <input
+                        type="text"
+                        name="r_and_d_location"
+                        placeholder="Enter R&D location"
+                        value={formData.r_and_d_location}
+                        required
+                        onChange={(e) => {
+                            setFormData({ ...formData, r_and_d_location: e.target.value });
+                            fetchRdLocationSuggestions(e.target.value);
+                        }}
+                        className="input"
+                    />
+                    {loadingRdSuggestions && <div>Loading...</div>}
+                    {rdLocationSuggestions.length > 0 && (
+                        <ul className="suggestions-dropdown">
+                            {rdLocationSuggestions.map((suggestion, index) => (
+                                <li key={index} onClick={() => handlesuggestionclick(suggestion)}>
+                                    <span>{suggestion}</span>
+                                    <span className="geolocation-icon">🌍</span>
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+                </div>
 
                 <div className="button-container">
                     <button type="submit" className="button">Add</button>
+                    <div className="button-container">
+                        <a href="#" onClick={handleUpdateClick} className="link">Click here to update </a>
+                    </div>
                     {selectedCompanyId && <button onClick={handleUpdate} className="button">Update</button>}
+                    <button onClick={navigatehome} className="button">suivant</button>
+                    <div></div>
                 </div>
             </form>
             <Notification message={successMessage} />
+            {/* Pass selectedRdLocation to Map component */}
+            <Map selectedRdLocation={selectedRdLocation} />
         </div>
     );
 }

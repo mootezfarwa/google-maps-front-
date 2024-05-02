@@ -13,8 +13,12 @@ const Navbar = () => {
             <img src={phonehand} width={140}height={30}/>
             <Menu style={{ display: smallScreen ? "none" : "flex" }}>
                 <Item>Home</Item>
+                <Link to="/form">
                 <Item>Form</Item>
+                </Link>
+                <Link to="/map">
                 <Item>Location</Item>
+                </Link>
                 <Item>Contact</Item>
             </Menu>
             {

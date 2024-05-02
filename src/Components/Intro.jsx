@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import woman from "../assets/pngegg.png"
 import AnimatedShapes from "./AnimatedShapes";
-import { ImTextColor } from "react-icons/im";
-import { MdEmail } from "react-icons/md";
+import { Link } from 'react-router-dom';
+
 const Intro = () => {
   const smallScreen = window.screen.width <= 480 ? true : false;
   
@@ -18,8 +18,12 @@ const Intro = () => {
           This application allows you to identify your competitors on a map and add information about them.
         </Desc>
         <Info>
+          <Link to="/form">
           <Button>Form</Button>
+          </Link>
+          <Link to="/map">
           <ButtonM>Map</ButtonM>
+          </Link>
         </Info>
         
       </Left>
@@ -85,7 +89,7 @@ const Button = styled.button`
 cursor:pointer;
 padding:1rem; 
 background:#046eaf;
-color:#ef7807; 
+color:#FFFFFF; 
 border-radius:10px;
 letter-spacing:2px;
 font-weight: bold;
@@ -94,7 +98,7 @@ const ButtonM = styled.button`
 cursor:pointer;
 padding:1rem; 
 background:#046eaf;
-color:#ef7807; 
+color:#FFFFFF; 
 border-radius:10px;
 letter-spacing:2px;
 font-weight: bold;

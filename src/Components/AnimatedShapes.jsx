@@ -1,7 +1,7 @@
 import styled from "styled-components";
-import squareImage from '/workspaces/google-maps-front-/src/assets/Produits-avocarbon-1.png'; 
-import sealsImage from '/workspaces/google-maps-front-/src/assets/4.png'; 
-import brushImage from '/workspaces/google-maps-front-/src/assets/2.png';
+import squareImage from '../assets/Produits-avocarbon-1.png'; 
+import sealsImage from '../assets/4.png'; 
+import brushImage from '../assets/2.png';
 const Square = styled.div`
   width: 120px;
   height: 120px;
@@ -60,6 +60,7 @@ const AnimatedShapes = () => {
             <Square />
             <Circle />
             <Rect />
+            
         </>
     );
 }
