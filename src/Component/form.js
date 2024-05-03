@@ -6,10 +6,10 @@ import phonehand from "../assets/logo-avocarbon.png";
 import { useNavigate } from 'react-router-dom';
 import Map from './map';
 
-
 function Form() {
     const [companies, setCompanies] = useState([]);
     const [selectedCompanyId, setSelectedCompanyId] = useState('');
+    const [markerCoordinates, setMarkerCoordinates] = useState(null);
     const [formData, setFormData] = useState({
         name: '',
         headquarters_location: '',
@@ -28,7 +28,19 @@ function Form() {
 
     useEffect(() => {
         fetchCompanies();
+        // Retrieve selected R&D location from storage on component mount
+        const storedRdLocation = localStorage.getItem('selectedRdLocation');
+        if (storedRdLocation) {
+            setSelectedRdLocation(storedRdLocation);
+        }
     }, []);
+
+    useEffect(() => {
+        // Save selected R&D location to storage whenever it changes
+        if (selectedRdLocation) {
+            localStorage.setItem('selectedRdLocation', selectedRdLocation);
+        }
+    }, [selectedRdLocation]);
 
     const fetchRdLocationSuggestions = async (inputValue) => {
         try {
@@ -149,6 +161,7 @@ function Form() {
                     <input type="text" name="headquarters_location" placeholder="Enter headquarters location" value={formData.headquarters_location} required onChange={(e) => setFormData({ ...formData, headquarters_location: e.target.value })} className="input" />
                 </div>
 
+         
                 <div className="input-group">
                     <label htmlFor="country" className="label">Country:</label>
                     <select name="country" value={formData.country} onChange={(e) => setFormData({ ...formData, country: e.target.value })} className="input" required>
@@ -388,13 +401,14 @@ function Form() {
                     </div>
                     {selectedCompanyId && <button onClick={handleUpdate} className="button">Update</button>}
                     <button onClick={navigatehome} className="button">suivant</button>
-                    <div></div>
                 </div>
             </form>
             <Notification message={successMessage} />
             {/* Pass selectedRdLocation to Map component */}
-            <Map selectedRdLocation={selectedRdLocation} />
+            <Map selectedRdLocation={selectedRdLocation} productType={formData.product} companies={companies} />
+
         </div>
+
     );
 }
 
